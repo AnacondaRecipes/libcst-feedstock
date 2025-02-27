@@ -21,6 +21,8 @@ requirements:
     - setuptools-rust
     - setuptools_scm
     - {{ compiler('rust') }}
+    - {{ stdlib('c') }} # [not osx]
+    - {{ compiler('c') }} # [not osx]
     host:
     - python
     - pip
