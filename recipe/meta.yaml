@@ -20,9 +20,8 @@ requirements:
     - setuptools
     - setuptools-rust
     - setuptools_scm
+    - wheel
     - {{ compiler('rust') }}
-    - {{ stdlib('c') }} # [not osx]
-    - {{ compiler('c') }} # [not osx]
     host:
     - python
     - pip
