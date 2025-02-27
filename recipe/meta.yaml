@@ -21,12 +21,15 @@ build:
 
 requirements:
     build:
+    - patch        # [not win]
+    - m2-patch    # [win]
     - python
     - setuptools
     - setuptools-rust
     - setuptools_scm
     - wheel
     - {{ compiler('rust') }}
+    - {{ compiler('cxx') }}
     host:
     - python
     - pip
