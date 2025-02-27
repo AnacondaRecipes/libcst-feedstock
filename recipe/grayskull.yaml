@@ -1,0 +1,41 @@
+{% set name = "libcst" %}
+{% set version = "1.6.0" %}
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+source:
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/libcst-{{ version }}.tar.gz
+  sha256: e80ecdbe3fa43b3793cae8fa0b07a985bd9a693edbe6e9d076f5422ecadbf0db
+build:
+  noarch: python
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  number: 0
+requirements:
+  host:
+    - python >=3.9
+    - setuptools
+    - setuptools-scm
+    - setuptools-rust
+    - wheel
+    - pip
+  run:
+    - python >=3.9
+    - pyyaml >=5.2
+test:
+  imports:
+    - libcst
+  commands:
+    - pip check
+  requires:
+    - pip
+about:
+  summary: A concrete syntax tree with AST-like properties for Python 3.0 through 3.13 programs.
+  license: Apache-2.0
+  license_file:
+    - LICENSE
+    - native/libcst/LICENSE
+    - native/libcst/src/tokenizer/core/LICENSE
+    - native/libcst_derive/LICENSE
+extra:
+  recipe-maintainers:
+    - Arishamays1
