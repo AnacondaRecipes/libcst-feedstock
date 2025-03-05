@@ -13,8 +13,8 @@ build:
   number: 0
   skip: true  # [py<39]
   script:
-    - {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
     - rm %BUILD_PREFIX%\\.cargo.win\\config  # [win]
+    - {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
   missing_dso_whitelist:  # [s390x]
     - $RPATH/ld64.so.1    # [s390x]
 
@@ -37,7 +37,6 @@ requirements:
     run:
     - typing_extensions >=3.7.4.2
     - typing_inspect >=0.4.0
-    - python
     - pyyaml >=5.2
 
 test:
