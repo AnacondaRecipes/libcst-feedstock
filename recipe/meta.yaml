@@ -22,7 +22,6 @@ build:
 
 requirements:
     build:
-    - python
     - setuptools
     - setuptools-rust
     - setuptools_scm
