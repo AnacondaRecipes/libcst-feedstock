@@ -9,7 +9,6 @@ source:
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
   sha256: e80ecdbe3fa43b3793cae8fa0b07a985bd9a693edbe6e9d076f5422ecadbf0db
 
-# Cargo files are removed because the upstream package triggers a duplicate build, causing Windows builds to fail.
 build:
   number: 0
   skip: true  # [py<39]
