@@ -27,7 +27,6 @@ requirements:
     - setuptools_scm
     - wheel
     - {{ compiler('rust') }}
-    - {{ compiler('cxx') }}
     host:
     - python
     - pip
@@ -35,8 +34,6 @@ requirements:
     - setuptools-rust
     - wheel
     run:
-    - typing_extensions >=3.7.4.2
-    - typing_inspect >=0.4.0
     - python
     - pyyaml >=5.2
 
