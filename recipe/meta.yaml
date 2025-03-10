@@ -22,10 +22,6 @@ build:
 
 requirements:
     build:
-    - setuptools
-    - setuptools-rust
-    - setuptools_scm
-    - wheel
     - {{ compiler('rust') }}
     - {{ compiler('cxx') }}
     host:
@@ -33,6 +29,8 @@ requirements:
     - pip
     - setuptools
     - setuptools-rust
+    - setuptools_scm
+    - wheel
     - wheel
     run:
     - python
