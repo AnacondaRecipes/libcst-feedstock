@@ -1,5 +1,5 @@
 {% set name = "libcst" %}
-{% set version = "0.3.19" %}
+{% set version = "1.6.0" %}
 
 package:
   name: {{ name|lower }}
@@ -7,27 +7,34 @@ package:
 
 source:
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 4876239db55164acaf034ee01f56a7db0a2f90cacea24b183d8aa69efc11b067
+  sha256: e80ecdbe3fa43b3793cae8fa0b07a985bd9a693edbe6e9d076f5422ecadbf0db
 
 build:
   number: 0
-  skip: true  # [py < 36]
-  script: {{ PYTHON }} -m pip install . -vv
+  skip: true  # [py<39]
+# Cargo is actively removed as the upstream package calls in a duplicate build, causing windows builds to fail.
+  script:
+    - rm %BUILD_PREFIX%\\.cargo.win\\config  # [win]
+    - {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
+  missing_dso_whitelist:  # [s390x]
+    - $RPATH/ld64.so.1    # [s390x]
+
 
 requirements:
-  host:
-    - dataclasses   # [py < 37]
+    build:
+    - {{ compiler('rust') }}
+    - {{ compiler('cxx') }}
+    host:
+    - python
     - pip
+    - setuptools
+    - setuptools-rust
+    - setuptools_scm
+    - wheel
+    - wheel
+    run:
     - python
     - pyyaml >=5.2
-    - typing_extensions >=3.7.4.2
-    - typing_inspect >=0.4.0
-  run:
-    - dataclasses   # [py < 37]
-    - python
-    - pyyaml >=5.2
-    - typing_extensions >=3.7.4.2
-    - typing_inspect >=0.4.0
 
 test:
   imports:
@@ -59,6 +66,10 @@ test:
     - libcst.metadata.tests
     - libcst.testing
     - libcst.tests
+  commands:
+    - pip check
+  requires:
+    - pip
 
 about:
   home: https://github.com/Instagram/LibCST
