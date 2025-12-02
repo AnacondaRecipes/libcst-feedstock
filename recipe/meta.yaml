@@ -1,30 +1,29 @@
 {% set name = "libcst" %}
-{% set version = "1.6.0" %}
+{% set version = "1.8.6" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: e80ecdbe3fa43b3793cae8fa0b07a985bd9a693edbe6e9d076f5422ecadbf0db
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: f729c37c9317126da9475bdd06a7208eb52fcbd180a6341648b45a56b4ba708b
 
 build:
   number: 0
   skip: true  # [py<39]
-# Cargo is actively removed as the upstream package calls in a duplicate build, causing windows builds to fail.
+  # Cargo is actively removed as the upstream package calls in a duplicate build, causing windows builds to fail.
   script:
     - rm %BUILD_PREFIX%\\.cargo.win\\config  # [win]
     - {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
   missing_dso_whitelist:  # [s390x]
-    - $RPATH/ld64.so.1    # [s390x]
-
+    - $RPATH/ld64.so.1  # [s390x]
 
 requirements:
-    build:
+  build:
     - {{ compiler('rust') }}
     - {{ compiler('cxx') }}
-    host:
+  host:
     - python
     - pip
     - setuptools
@@ -32,9 +31,12 @@ requirements:
     - setuptools_scm
     - wheel
     - wheel
-    run:
+    - setuptools-scm
+  run:
     - python
-    - pyyaml >=5.2
+    - pyyaml >=6.0.3  # [py>=314]
+    - pyyaml-ft >=8.0.0  # [py==313]
+    - typing_extensions  # [py<310]
 
 test:
   imports:
