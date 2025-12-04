@@ -68,8 +68,9 @@ test:
   commands:
     - pip check
     # E   ModuleNotFoundError: No module named 'hypothesmith' -> https://pypi.org/project/hypothesmith/
-    {% set ignore_tests = " --ignore=test_fuzz.py" %}
-    - pytest --pyargs libcst.tests {{ ignore_tests }}
+    - rm ${SP_DIR}/libcst/tests/test_fuzz.py  # [unix]
+    - del /f /q %SP_DIR%\libcst\tests\test_fuzz.py  # [win]
+    - pytest --pyargs libcst.tests 
   requires:
     - pip
     - pytest
