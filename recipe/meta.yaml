@@ -35,6 +35,9 @@ requirements:
     - pyyaml >=6.0.3  # [py>313]
     - typing-extensions  # [py<310]
 
+# E   AssertionError: self.assertTrue(fixtures.exists(), f"{fixtures} should exist")
+{% set deselect_tests = " --deselect=test_roundtrip.py::RoundTripTests::test_clean_roundtrip" %}
+{% set deselect_tests = deselect_tests + " --deselect=test_roundtrip.py::RoundTripTests::test_transform_roundtrip" %}
 test:
   imports:
     - libcst
@@ -70,7 +73,7 @@ test:
     # E   ModuleNotFoundError: No module named 'hypothesmith' -> https://pypi.org/project/hypothesmith/
     - rm ${SP_DIR}/libcst/tests/test_fuzz.py  # [unix]
     - del /f /q %SP_DIR%\libcst\tests\test_fuzz.py  # [win]
-    - pytest --pyargs libcst.tests 
+    - pytest --pyargs libcst.tests {{ deselect_tests }}
   requires:
     - pip
     - pytest
