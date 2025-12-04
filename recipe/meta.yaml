@@ -75,11 +75,13 @@ test:
 
 about:
   home: https://github.com/Instagram/LibCST
+  summary: A concrete syntax tree with AST-like properties for Python 3.5, 3.6, 3.7 and 3.8 programs.
   license: MIT
   license_family: MIT
   license_file: LICENSE
-  summary: A concrete syntax tree with AST-like properties for Python 3.5, 3.6, 3.7 and 3.8 programs.
-  doc_url: https://libcst.readthedocs.io/
+  description: |
+    A Concrete Syntax Tree (CST) parser and serializer library for Python
+  doc_url: https://libcst.readthedocs.io
   dev_url: https://github.com/Instagram/LibCST
 
 extra:
