@@ -35,6 +35,8 @@ requirements:
     - pyyaml >=6.0.3  # [py>313]
     - typing-extensions  # [py<310]
 
+# E   ModuleNotFoundError: No module named 'hypothesmith' -> https://pypi.org/project/hypothesmith/
+{% set deselect_tests = " --deselect=test_fuzz.py" %}
 test:
   imports:
     - libcst
@@ -67,7 +69,7 @@ test:
     - libcst.tests
   commands:
     - pip check
-    - pytest --pyargs libcst.tests
+    - pytest --pyargs libcst.tests {{ deselect_tests }}
   requires:
     - pip
     - pytest
