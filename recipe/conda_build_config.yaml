@@ -1,0 +1,4 @@
+c_compiler_version:  # [linux]
+  - 11.2.0  # [linux]
+rust_compiler_version:
+  - 1.89.0

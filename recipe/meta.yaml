@@ -1,41 +1,43 @@
 {% set name = "libcst" %}
-{% set version = "1.6.0" %}
+{% set version = "1.8.6" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: e80ecdbe3fa43b3793cae8fa0b07a985bd9a693edbe6e9d076f5422ecadbf0db
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: f729c37c9317126da9475bdd06a7208eb52fcbd180a6341648b45a56b4ba708b
 
 build:
   number: 0
-  skip: true  # [py<39]
-# Cargo is actively removed as the upstream package calls in a duplicate build, causing windows builds to fail.
   script:
     - rm %BUILD_PREFIX%\\.cargo.win\\config  # [win]
     - {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
-  missing_dso_whitelist:  # [s390x]
-    - $RPATH/ld64.so.1    # [s390x]
-
+  skip: true  # [py<39]
 
 requirements:
-    build:
+  build:
+    - {{ stdlib('c') }}
+    - {{ compiler('c') }}
     - {{ compiler('rust') }}
-    - {{ compiler('cxx') }}
-    host:
-    - python
+  host:
     - pip
+    - python
     - setuptools
     - setuptools-rust
     - setuptools_scm
     - wheel
-    - wheel
-    run:
+  run:
     - python
-    - pyyaml >=5.2
+    - pyyaml >=5.2  # [py<313]
+    - pyyaml-ft >=8.0.0  # [py==313]
+    - pyyaml >=6.0.3  # [py>313]
+    - typing-extensions  # [py<310]
 
+# E   AssertionError: self.assertTrue(fixtures.exists(), f"{fixtures} should exist")
+{% set deselect_tests = " --deselect=test_roundtrip.py::RoundTripTests::test_clean_roundtrip" %}
+{% set deselect_tests = deselect_tests + " --deselect=test_roundtrip.py::RoundTripTests::test_transform_roundtrip" %}
 test:
   imports:
     - libcst
@@ -68,16 +70,24 @@ test:
     - libcst.tests
   commands:
     - pip check
+    # E   ModuleNotFoundError: No module named 'hypothesmith' -> https://pypi.org/project/hypothesmith/
+    - rm ${SP_DIR}/libcst/tests/test_fuzz.py  # [unix]
+    - del /f /q %SP_DIR%\libcst\tests\test_fuzz.py  # [win]
+    - pytest --pyargs libcst.tests {{ deselect_tests }}
   requires:
     - pip
+    - pytest
+    - hypothesis
 
 about:
   home: https://github.com/Instagram/LibCST
+  summary: A concrete syntax tree with AST-like properties for Python 3.5, 3.6, 3.7 and 3.8 programs.
   license: MIT
   license_family: MIT
   license_file: LICENSE
-  summary: A concrete syntax tree with AST-like properties for Python 3.5, 3.6, 3.7 and 3.8 programs.
-  doc_url: https://libcst.readthedocs.io/
+  description: |
+    A Concrete Syntax Tree (CST) parser and serializer library for Python
+  doc_url: https://libcst.readthedocs.io
   dev_url: https://github.com/Instagram/LibCST
 
 extra:
