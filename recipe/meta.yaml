@@ -1,13 +1,16 @@
 {% set name = "libcst" %}
-{% set version = "1.8.6" %}
+{% set version = "1.9.0" %}
+{% set deselect_tests = " --deselect=test_roundtrip.py::RoundTripTests::test_clean_roundtrip" %}
+{% set deselect_tests = 'deselect_tests + " --deselect=test_roundtrip.py::RoundTripTests::test_transform_roundtrip"' %}
 
+# E   AssertionError: self.assertTrue(fixtures.exists(), f"{fixtures} should exist")
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: f729c37c9317126da9475bdd06a7208eb52fcbd180a6341648b45a56b4ba708b
+  sha256: 087b58a9afe076bb08e2d726478e1f16cb928d67ffa9092817e033c335de522a
 
 build:
   number: 0
@@ -28,16 +31,15 @@ requirements:
     - setuptools-rust
     - setuptools_scm
     - wheel
+    - setuptools-scm
   run:
     - python
     - pyyaml >=5.2  # [py<313]
     - pyyaml-ft >=8.0.0  # [py==313]
     - pyyaml >=6.0.3  # [py>313]
     - typing-extensions  # [py<310]
+    - typing_extensions  # [py<310]
 
-# E   AssertionError: self.assertTrue(fixtures.exists(), f"{fixtures} should exist")
-{% set deselect_tests = " --deselect=test_roundtrip.py::RoundTripTests::test_clean_roundtrip" %}
-{% set deselect_tests = deselect_tests + " --deselect=test_roundtrip.py::RoundTripTests::test_transform_roundtrip" %}
 test:
   imports:
     - libcst
